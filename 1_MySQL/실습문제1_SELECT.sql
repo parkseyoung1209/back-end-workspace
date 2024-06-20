@@ -40,5 +40,11 @@ FROM actor
 WHERE first_name like "J%"
 ORDER BY char_length(last_name) DESC;
 -- 8. film 테이블에서 description에서 of 이전 문장만 중복 없이 10개만 추출해서 조회
+SELECT  distinct trim(both ' o' from substr(description, 1, instr(description, "of"))) as list
+FROM film
+order by list desc
+limit 10;
 
 -- 9. film 테이블에서 replacement_cost 최소 비용과 최대 비용 조회
+SELECT min(replacement_cost) as "최소 비용",max(replacement_cost) as"최대 비용"
+FROM film;
