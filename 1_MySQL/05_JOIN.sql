@@ -214,7 +214,7 @@ FROM employee
 JOIN job USING(job_code)
 JOIN department ON (dept_code = dept_id)
 JOIN location ON (local_code = location_id)
-WHERE job_name = "대리";
+WHERE job_name = "대리" AND local_name like 'ASIA%';
 
 -- 2. 70년대생이면서 여자이고, 성이 전 씨인 직원들의 직원명 ,주민번호, 부서명, 직급명 조회
 SELECT emp_name, emp_no, dept_title, job_name
