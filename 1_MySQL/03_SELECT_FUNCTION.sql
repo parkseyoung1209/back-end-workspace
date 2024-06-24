@@ -309,3 +309,61 @@ from employee;
         end as "급여등급"
 	FROM employee
     ORDER BY salary desc;
+    
+    
+-- 그룹함수(집계함수)------
+/*
+	그룹함수 --> 결과값 1개!
+    - 대량의 데이터들로 집계나 통계 같은 작업을 처리해야하는 경우 사용되는 함수들
+    - 모든 그룹 함수는 NULL 값을 자동으로 제외하고 값이 있는 것들만 계산
+    
+    SUM : 해당 컬럼 값들의 총 합계 반환
+*/
+-- 전체 사원의 총 급여 합 조회
+SELECT sum(salary)*12
+FROM employee;
+
+-- 부서코드가 D5인 사원들의 총 연봉(급여 * 12) 조회
+SELECT dept_code, sum(salary)*12 as "sumsalary"
+FROM employee
+WHERE dept_code = "D5";
+
+/*
+	AVG
+    - 해당 컬럼 값들의 평균값을 반환
+    - 모든 그룹 함수는 NULL 값을 자동으로 제외하기 때문에 AVG 함수를 사용할 때는 COALESCE 또는 IFNULL 함수와 함께 사용하는 걸 권장한다
+*/
+SELECT avg(salary), avg(bonus), avg(ifnull(salary, 0)), avg(ifnull(bonus, 0))
+FROM employee;
+
+/*
+	MIN : 해당 컬럼 값들 중에 가장 작은 값 반환
+    MAX : 해당 컬럼 값들 중에 가장 큰 값 반환
+*/
+SELECT min(emp_name), min(salary), min(hire_date), max(emp_name), max(salary), max(hire_date)
+FROM employee;
+
+/*
+	COUNT
+    - 컬럼 또는 행의 개수를 세서 반환
+    
+    * : 조회 결과에 해당하는 모든 행 개수 반환
+    컬럼 : 해당 컬럼값이 NULL이 아닌 행 개수 반환
+*/
+-- 전체 사원 수 조회
+SELECT count(*)
+FROM employee;
+
+SELECT count(bonus)
+FROM employee;
+
+SELECT count(distinct dept_code)
+FROM employee;
+
+-- 퇴사한 직원의 수 조회(ent_date 또는 ent_yn)
+SELECT count(ent_date)
+FROM employee;
+
+SELECT count(*)
+FROM employee
+WHERE ent_yn = 'Y';

@@ -225,12 +225,14 @@ WHERE substr(emp_no,1, 2) >=70 and
 substr(emp_no,1, 2) <80  and 
 substr(emp_name, 1,1) = "전"  and 
 substr(emp_no, 8,1) in ('2', '4');
+-- WHERE emp_no LIKE '7_____-2%'
 
 -- 3. 보너스를 받은 직원들의 직원명, 보너스, 연봉, 부서명, 근무지역 조회
-SELECT emp_name, bonus, salary*12 as 연봉, dept_title, local_name
+SELECT emp_name, bonus, format((salary+salary*bonus)*12 ,0) as 연봉, dept_title, local_name
 FROM employee
-JOIN department ON (dept_code = dept_id)
-JOIN location ON (location_id = local_code)
+left JOIN department ON (dept_code = dept_id)
+left JOIN location ON (location_id = local_code)
+-- 부서가 없는 직원들도 나타내고 싶다면 LEFT JOIN (현재는 employee 테이블이 왼쪽에 있음)
 WHERE bonus is not null;
 
 -- 4. 한국과 일본에서 근무하는 직원들의 직원명, 부서명, 근무지역, 근무국가 조회
@@ -242,7 +244,7 @@ JOIN national USING(national_code)
 WHERE national_name in ('한국', '일본');
 
 -- 5. 각 부서별 평균 급여를 조회하여 부서명, 평균 급여 조회
-SELECT dept_title, format(avg(salary),0) as "부서 평균 급여"
+SELECT dept_title, format(truncate(avg(salary),-1),0) as "부서 평균 급여"
 FROM employee
 JOIN department on (dept_code = dept_id)
 group by dept_title;
@@ -258,12 +260,18 @@ having sum(salary) >= 10000000;
 -- 급여 등급이 S1, S2인 경우 고급 => 5999999원 이상 1000만원 이하
 -- 급여 등급이 S3, S4인 경우 중급 => 300만원 이상 4999999원 이하
 -- 급여 등급이 S5, S6인 경우 초급 => 2999999원 이상 100만원 이하
+
 SELECT emp_id, emp_name, job_name, salary, 
 if(sal_level in ('s1', 's2'), "고급", 
-if(sal_level in ('s3', 's4'), "중급", "초급")) as 급여등급
+if(sal_level in ('s3', 's4'), "중급", "초급")) as 급여등급, 
+CASE WHEN sal_level IN ('S1', 'S2') THEN '고급'
+	 WHEN sal_level IN ('S3', 'S4') THEN '중급'
+     ELSE '초급'
+     END AS '급여등급(CASE문 사용)'
 FROM employee
 JOIN job USING (job_code)
 JOIN sal_grade ON (min_sal <= salary AND salary <= max_sal);
+
 -- 8. 보너스를 받지 않은 직원들 중 직급 코드가 J4 또는 J7인 직원들의 직원명, 직급명, 급여 조회
 SELECT emp_name, job_code, job_name, salary
 FROM employee
@@ -275,8 +283,8 @@ SELECT emp_name, job_name, dept_title, local_name
 FROM employee
 JOIN job USING (job_code)
 JOIN department ON (dept_code = dept_id)
-JOIN location ON (location_id = local_code)
-WHERE dept_code is not null;
+JOIN location ON (location_id = local_code);
+-- WHERE dept_code is not null; <- JOIN에서 이미 NULL 값을 제외시키기 때문에 굳이 필요가 없다.
 
 -- 10. 해외영업팀에 근무하는 직원들의 직원명, 직급명, 부서코드, 부서명 조회
 SELECT emp_name, job_name, dept_title, dept_code, national_name -- national_name은 확인용으로 넣음
@@ -285,7 +293,7 @@ JOIN job USING (job_code)
 JOIN department ON (dept_code = dept_id)
 JOIN location ON (location_id = local_code)
 JOIN national USING (national_code)
-WHERE national_name != "한국";
+WHERE dept_title like "%해외영업%";
 
 
 -- 11. 이름에 '형'자가 들어있는 직원들의 사번, 직원명, 직급명 조회

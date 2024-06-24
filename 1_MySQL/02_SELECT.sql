@@ -310,7 +310,7 @@ WHERE hire_date between '1990-01-01' and '2001-01-01';
     -- 1. 직급코드(job_code)가 J7이거나 J2인 사원들 중 급여가 200만원 이상인 사원들의 모든 칼럼 조회
 	SELECT *
     FROM employee
-    WHERE job_code in('J7', 'J2');
+    WHERE job_code in('J7', 'J2') and salary >=2000000;
     
     -- 2. 사수가(manager_id) 없고 부서배치도 받지 않은 사원들의 사원명, 사수사번, 부서코드 조회
     
@@ -334,9 +334,10 @@ WHERE hire_date between '1990-01-01' and '2001-01-01';
     FROM employee
     WHERE salary between 2000000 and 5000000 and hire_date>='2001-01-01' and bonus is null;
     
-    -- 6. 보너스 포함 연봉이 null이 아니고 이름에 '하'가 포함되어있는 사원들의 사번 사원명 급여 보너스 포함 연봉(별칭부여) 조회
+    -- 6. 보너스 포함 연봉이 null이 아니고 이름에 '하'가 포함되어있는 사원들의 사번 사원명 급여 보너스 포함 연봉(별칭부여) 조회(연봉이 높은 순으로 조회)
     -- 보너스 포함 연봉 : (급여 + 보너스*급여) *12
     
     SELECT emp_id, emp_name, salary, (salary+salary*bonus)*12 as year_salary
     FROM employee
     WHERE (salary+salary*bonus)*12 is not null and emp_name LIKE "%하%"
+    ORDER BY year_salary DESC;
