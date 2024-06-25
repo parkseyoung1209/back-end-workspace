@@ -40,18 +40,44 @@ FROM actor
 JOIN film_actor USING (actor_id)
 JOIN film USING (film_id)
 WHERE title = "NOON PAPI";
+
+-- >> 서브쿼리로도 가능하지만 추천은 안함
+-- >> 사실상 조회해야되는게 actor 테이블만 필요
+SELECT first_name, last_name
+FROM actor
+WHERE actor_id IN (SELECT actor_id
+FROM film_actor
+WHERE film_id = (SELECT film_id FROM film
+WHERE title = 'NOON PAPI')); -- > 여러가지 요소라 in을 써야함
+
 -- 4. 각 카테고리별 이메일이 JOYCE.EDWARDS@sakilacustomer.org인 고객이 빌린 DVD 대여 수 조회
 SELECT name as category, count(name) as count
-FROM customer
-JOIN rental USING (customer_id)
+/*FROM customer
+JOIN rental USING (customer_id)  -> rental이 가장 많이 필요한 정보를 가졌기 때문에 순서가 잘못됐다*/
+FROM rental
+JOIN customer USING (customer_id)
 JOIN inventory USING (inventory_id)
-JOIN film USING (film_id)
+-- JOIN film USING (film_id) -> 굳이 필요가 없었다
 JOIN film_category USING (film_id)
 JOIN category USING (category_id)
 WHERE email = "JOYCE.EDWARDS@sakilacustomer.org"
 GROUP BY name;
--- 5. 이메일이 JOYCE.EDWARDS@sakilacustomer.org인 고객이 가장 최근에 빌린 영화 제목과 영화 내용을 조회 
 
+-- 서브쿼리 방식
+
+SELECT name as category, count(name) as count
+FROM rental
+JOIN customer USING (customer_id)
+JOIN inventory USING (inventory_id)
+JOIN film_category USING (film_id)
+JOIN category USING (category_id)
+WHERE customer_id = (SELECT customer_id
+FROM customer
+WHERE email = "JOYCE.EDWARDS@sakilacustomer.org")
+GROUP BY name;
+
+
+-- 5. 이메일이 JOYCE.EDWARDS@sakilacustomer.org인 고객이 가장 최근에 빌린 영화 제목과 영화 내용을 조회 
 SELECT title, description
 FROM customer
 JOIN rental USING (customer_id)
@@ -59,8 +85,16 @@ JOIN inventory USING (inventory_id)
 JOIN film USING (film_id)
 JOIN film_category USING (film_id)
 JOIN category USING (category_id)
-WHERE email = "JOYCE.EDWARDS@sakilacustomer.org" and rental_date = (SELECT max(rental_date)
+WHERE rental_date = (SELECT max(rental_date)
 FROM customer
 JOIN rental USING (customer_id)
 WHERE email ="JOYCE.EDWARDS@sakilacustomer.org" );
 
+SELECT title, description
+FROM rental
+	JOIN inventory USING (inventory_id)
+    JOIN film USING(film_id)
+WHERE rental_date = (SELECT max(rental_date)
+FROM customer
+JOIN rental USING (customer_id)
+WHERE email ="JOYCE.EDWARDS@sakilacustomer.org" );

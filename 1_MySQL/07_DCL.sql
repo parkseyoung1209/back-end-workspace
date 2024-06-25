@@ -19,7 +19,7 @@ DROP USER test;
 GRANT ALL PRIVILEGES ON kh.* TO test;
 
 -- 데이터베이스(스키마) 권한 회수
-REVOKE ALL PRIVILEGES ON *.* FROM test;
+REVOKE ALL PRIVILEGES ON kh.* FROM test;
 
 /*
 	데이터베이스(Database) : 데이터의 집합을 저장하고 관리하는 시스템

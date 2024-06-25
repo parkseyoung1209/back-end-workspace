@@ -54,11 +54,16 @@ WHERE emp_name = '노옹철';
 -- DELETE FROM 테이블명 WHERE 조건;
 DELETE FROM emp_salary WHERE emp_id in (213, 218);
 
+DELETE FROM emp_salary
+WHERE emp_id = 200;
+
 rollback;
 SELECT *
 FROM emp_salary;
-
-
+-- DDL 구문을 실행하는 순간 임시 저장된 변경사항들을 무조건 반영!
+CREATE TABLE test(
+tid INT
+);
 
 
 

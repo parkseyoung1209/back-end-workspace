@@ -102,3 +102,11 @@ JOIN rent ON (member_no = rent_mem_no)
 JOIN BOOK ON (rent_book_no = bk_no)
 JOIN publisher ON (bk_pub_no = pub_no)
 WHERE member_no=1;
+
+
+SELECT *
+FROM member
+JOIN rent ON (member_no = rent_mem_no)
+JOIN BOOK ON (rent_book_no = bk_no)
+JOIN publisher ON (bk_pub_no = pub_no)
+

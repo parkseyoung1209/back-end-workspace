@@ -237,7 +237,7 @@ FROM member
 LEFT JOIN mem_grade ON (grade_id = grade_code);
 
 /*
-	FOREING KEY (외래키)
+	FOREGIN KEY (외래키)
     - 외래키 역할을 하는 컬럼에 부여하는 제약조건
     - 다른 테이블에 존재하는 값만 들어와야 되는 특정 컬럼에 부여하는 제약조건
 		(단, NULL 값은 가질 수 있음)
