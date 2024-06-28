@@ -26,8 +26,10 @@ public class VariablePractice {
 	public void method1() {
 		int adult = 10000;
 		int ddd = 7000;
+		int adultcount = 2;
+		int teencount = 3;
 		
-		System.out.println(adult*2 + ddd*3);
+		System.out.println((adult*adultcount + ddd*teencount));
 	}
 	
 	/*
@@ -44,11 +46,19 @@ public class VariablePractice {
 		int y = 7;
 		int z = 9;
 		
-		System.out.println("x = " + y);
-		System.out.println("y = " + z);
-		System.out.println("z = " + x);
+		//
+		int tmp = x;
+		x = y;
+		y = z;
+		z = tmp;
+		
+		System.out.println("x = " + x);
+		System.out.println("y = " + y);
+		System.out.println("z = " + z);
 	}
-
+	
+	Scanner sc = new Scanner(System.in);
+	
 	/*
 	 * 정수 두 개를 입력 받아 두 수의 합(+), 차(-), 곱(*), 나누기(/)한 몫을 출력하세요.
 	 * 
@@ -60,13 +70,20 @@ public class VariablePractice {
 	 * 나누기 몫 : 3
 	 * */
 	public void method3() {
-		int numA = 23;
-		int numB = 7;
+		Scanner sc = new Scanner(System.in);
+		System.out.print("첫번째 정수 : " );
+		int num1 = Integer.parseInt(sc.nextLine());
+		System.out.print("두번째 정수 : " );
+		int num2 = Integer.parseInt(sc.nextLine());
+		int sum = num1 + num2;
+		int minus = num1-num2;
+		int time = num1*num2;
+		int divide = num1/num2;
+		System.out.println("더하기 : " + sum);
+		System.out.println("빼기 : " + minus);
+		System.out.println("곱하기 : " + time);
+		System.out.println("나누기 : " + divide);
 		
-		System.out.println(numA+numB);
-		System.out.println(numA-numB);
-		System.out.println(numA*numB);
-		System.out.println(numA/numB);
 	}
 
 	/*
@@ -80,13 +97,16 @@ public class VariablePractice {
 	 * 둘레 : 110.4
 	 * */
 	public void method4() {
-		Scanner sc = new Scanner(System.in);
 		System.out.print("가로 : ");
 		double width = Double.parseDouble(sc.nextLine());
 		System.out.print("세로 : ");
 		double height = Double.parseDouble(sc.nextLine());
-		System.out.println("면적 : " + width*height);
-		System.out.println("둘레 : " + (width+height)*2);
+		
+		double area = width * height;
+		double size = (width+height)*2;
+		
+		System.out.printf("면적 : %.2f\n", area);
+		System.out.printf("둘레 : %.1f\n", size);
 		
 	}
 
@@ -99,7 +119,6 @@ public class VariablePractice {
 	 * 마지막 문자 : e
 	 * */
 	public void method5() {
-		Scanner sc = new Scanner(System.in);
 		System.out.print("문자열을 입력하세요 : ");
 		String text = sc.nextLine();
 		System.out.println("첫번째 문자 : " + text.charAt(0));
@@ -117,12 +136,13 @@ public class VariablePractice {
 	 * B unicode : 66
 	 * */
 	public void method6() {
-		Scanner sc = new Scanner(System.in);
 		System.out.print("문자열을 입력하세요 : ");
 		char uniCode = sc.nextLine().charAt(0);
 		System.out.println("문자 : " + uniCode);
 		int uniCode2 = uniCode;
+		char uniCode3 = (char) (uniCode2 + 1);
 		System.out.println(uniCode + " unicode : " + uniCode2);
+		System.out.println(uniCode3 + " unicode : " + (int)uniCode3);
 	}
 	
 	/*
@@ -135,7 +155,6 @@ public class VariablePractice {
 	 * 평균 : 72.67
 	 * */
 	public void method7() {
-		Scanner sc = new Scanner(System.in);
 		System.out.println("국어 점수 : ");
 		int korean = Integer.parseInt(sc.nextLine());
 		System.out.println("영어 점수 : ");
@@ -147,7 +166,6 @@ public class VariablePractice {
 		
 		System.out.println("총점 : " + sum);
 		System.out.printf("평균 : %.2f" , avg);
-		
 		
 	}
 
