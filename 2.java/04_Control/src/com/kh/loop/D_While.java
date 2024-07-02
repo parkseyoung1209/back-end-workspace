@@ -155,18 +155,20 @@ public class D_While {
 		
 	}
 	public void method6() {
-		Scanner sc = new Scanner(System.in);
-		System.out.print("숫자를 입력해보세요 : ");
-		int a = sc.nextInt();
-		boolean logic1 = a%4 == 0 && (a%100 == 0 || a%400 == 0);
-		boolean logic2 = a>=1 && a<=4000;
-		
-		if(logic1 && logic2) {
-			System.out.println('1');
-		}else {
-			System.out.println('0');
+		int number1 = sc.nextInt();
+		int number2 = sc.nextInt();
+		// number2가 45보다 크거나 같다면 number2 - 45 
+		// num2가 45보다 작다면 (60+number2)-45 그리고 num1에다가 1을 뺀다
+		// num1이 0 이라면 23을 더해준다
+		boolean logic1 = number1>=0 && number1<=23; //시
+		boolean logic2 = number2>=0 && number2<=59; //분
+		if(logic1 && logic2 && number2>=45) {
+			System.out.println(number1 +" " + (number2-45));
+		}else if(logic1 && logic2 && number2<45 && number1>0) {
+			System.out.println((number1-1) +" " + ((60+number2)-45));
+		}else if(logic1 && logic2 && number2<45 && number1==0) {
+			System.out.println((number1+23) +" " + ((60+number2)-45));
 		}
-
 	}
 	public static void main(String[] args) {
 		D_While d = new D_While();
@@ -176,6 +178,7 @@ public class D_While {
 //		d.method4();
 //		d.method5();
 		d.method6();
+
 	}
 
 }
