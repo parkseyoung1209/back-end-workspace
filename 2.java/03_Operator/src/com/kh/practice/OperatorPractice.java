@@ -10,8 +10,8 @@ public class OperatorPractice {
 //		o.method2();
 //		o.method3();
 //		o.method4();
-		o.method5();
-		o.method6();
+//		o.method5();
+//		o.method6();
 		o.method7();
 	}
 
@@ -56,7 +56,7 @@ public class OperatorPractice {
 	public void method4() {
 		System.out.println("숫자를 입력해주세요 : ");
 		int number5 = Integer.parseInt(sc.nextLine());
-		String result = number5%2 == 0 & number5!=0 ? "짝수입니다" : "짝수가 아닙니다";
+		String result = number5%2 == 0 && number5!=0 ? "짝수입니다" : "짝수가 아닙니다";
 		System.out.println(result);
 	}
 
@@ -64,13 +64,12 @@ public class OperatorPractice {
 	public void method5() {
 		System.out.println("주민번호를 입력하세요(-포함) : ");
 		String no = sc.nextLine();
-		int result = no.charAt(7); 
+		char result = no.charAt(7); 
 		
-	
 		System.out.println(result); // 49 <-- 
-		boolean women = no.length() == 14 && (result == 50 || result == 52);
+		boolean women = no.length() == 14 && (result == '1' || result == '3');
 		
-		String result2 = no.length() == 14 && (result == 49 || result == 51) ? "남자" : women ? "여자" : "한국인이 아님";
+		String result2 = no.length() == 14 && (result == '2' || result == '4') ? "남자" : women ? "여자" : "한국인이 아님";
 		// 결론 : int result로 잡게 되면 문자열 '1', '2'... 등을 실제 정수 값 49, 50으로 변환시키기 때문에 result 값에 따옴표 없는 숫자를 넣고 싶다면 해당하는 실제 숫자값을 넣어야된다
 		System.out.println(result2);
 	}
