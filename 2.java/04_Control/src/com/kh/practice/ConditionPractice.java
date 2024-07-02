@@ -12,11 +12,11 @@ public class ConditionPractice {
 //		c.method2();
 //		c.method3();
 //		c.method4();
-		c.method5();
+//		c.method5();
 //		c.method6();
 //		c.method7();
 //		c.method8();
-//		c.method9();
+		c.method9();
 //		c.method10();
 //		c.method11();
 	}
@@ -160,14 +160,14 @@ public class ConditionPractice {
      */
     public void method6() {
     	System.out.println("각도 입력");
-    	int degree = Integer.parseInt(sc.nextLine());
+    	int angle = Integer.parseInt(sc.nextLine());
     	
-    	if(degree<=180 && degree>=0) {
-    		if(degree>0 && degree<90) {
+    	if(angle<=180 && angle>=0) {
+    		if(angle>0 && angle<90) {
     			System.out.println('1');
-    		}else if(degree == 90) {
+    		}else if(angle == 90) {
     			System.out.println('2');
-    		}else if (degree >90 && degree <180) {
+    		}else if (angle >90 && angle <180) {
     			System.out.println('3');
     		}else {
     			System.out.println('4');
@@ -209,7 +209,7 @@ public class ConditionPractice {
     	System.out.print("비밀번호 : ");
     	int result2 = Integer.parseInt(sc.nextLine());
     	
-    	if(id.equals(result1) && result2 == passwd) {
+    	/*if(id.equals(result1) && result2 == passwd) {
     		System.out.println("로그인 성공!");
     	}else if(id.equals(result1) && result2 != passwd) {
     		System.out.println("비밀번호가 틀렸습니다");
@@ -217,6 +217,30 @@ public class ConditionPractice {
     		System.out.println("아이디가 틀렸습니다");
     	}else {
     		System.out.println("로그인 실패!");
+    	}*/
+    	
+    	int logic1 = result2 == passwd ? 1 : 0;
+    	int logic2 = id.equals(result1) ? 1 : 0;
+    	
+    	switch(logic1) {
+    		case 0 : 
+    			switch(logic2) {
+    			case 0 : 
+    				System.out.println("로그인 실패!");
+    				break;
+    			case 1 : 
+    				System.out.println("비밀번호가 틀렸습니다");
+    				break;
+    			} break;
+    		case 1 :
+    			switch(logic2) {
+    			case 0 : 
+    				System.out.println("아이디가 틀렸습니다");
+    				break;
+    			case 1 : 
+    				System.out.println("로그인 성공!");
+    				break;
+    			}break;
     	}
     	
     }
@@ -285,7 +309,7 @@ public class ConditionPractice {
     	int dev = num1/num2;
     	int per = num1%num2;
     	
-    	if(cal.charAt(0) == '+' && (num1>0 && num2 > 0)) {
+    	/*if(cal.charAt(0) == '+' && (num1>0 && num2 > 0)) {
     		System.out.println(num1 + "+" + num2 + "=" + sum);
     	}else if(cal.charAt(0) == '-' && (num1>0 && num2 > 0)) {
     		System.out.println(num1 + "-"+ num2 + "=" + min);
@@ -297,8 +321,34 @@ public class ConditionPractice {
     		System.out.println(num1 + "%" + num2 + "=" + per);
     	}else {
     		System.out.println("잘못입력했습니다, 프로그램을 종료합니다");
+    	}*/
+    	if(num1 <= 0 || num2 <=0) {
+    		System.out.println("잘못입력했습니다. 프로그램을 종료합니다.");
+    		return;
     	}
     	
+    	int result = 0;
+    	switch(cal.charAt(0)) {
+    	case '+' :
+    		result = sum;
+    		break;
+    	case '-' :
+    		result = min;
+    		break;
+    	case '*' :
+    		result = time;
+    		break;
+    	case '/' :
+    		result = dev;
+    		break;
+    	case '%' :
+    		result = per;
+    		break;
+    	default :
+    		System.out.println("잘못입력했습니다, 프로그램을 종료합니다");
+    		return;
+    	}
+    	System.out.printf("%d %s %d = %d",num1,cal,num2,result);
     }
 
     /*
@@ -322,23 +372,25 @@ public class ConditionPractice {
     	
     	int number = Integer.parseInt(sc.nextLine());
     		
+    		String result = "";
     		switch(number) {
         	case 1 :
-        		System.out.println("입력 메뉴입니다.");
+        		result = "입력";
         		break;
         	case 2 :
-        		System.out.println("수정 메뉴입니다.");
+        		result = "수정";
         		break;
         	case 3: 
-        		System.out.println("조회 메뉴입니다.");
+        		result = "조회";
         		break;
         	case 4:
-        		System.out.println("삭제 메뉴입니다.");
+        		result = "삭제";
         		break;
         	case 9 :
         		System.out.println("프로그램이 종료됩니다.");
+        		return;
         	}
-        	
+        	System.out.println(result + "메뉴입니다");
     	}
  
 
@@ -404,15 +456,15 @@ public class ConditionPractice {
     	
     	double total2 = score1 + score2 + score3 + num4;
     	
-    	/*if(total + num4 >= 70 && (num4<=20 && num4>=14)) {
+    	/*if(total2 >= 70 && (num4<=20 && num4>=14)) {
     		System.out.println("pass");
-    	}else if((int)total + num4 <70 && (num4<=20 && num4>=14)) {
-    		System.out.println("FAIL [점수 미달] " + "(총점 " + (total+num4) + ")");
-    	}else if((int)total + num4 >= 70 && num4<14) {
+    	}else if((int)total2 <70 && (num4<=20 && num4>=14)) {
+    		System.out.println("FAIL [점수 미달] " + "(총점 " + total2 + ")");
+    	}else if((int)total2 >= 70 && num4<14) {
     		System.out.println("FAIL [출석 횟수 부족] " + "(" + num4 + "/20)");
     	}else {
     		System.out.println("FAIL [출석 횟수 부족] " + "(" + num4 + "/20)");
-    		System.out.println("FAIL [점수 미달] " + "(총점 " + (total+num4) + ")");
+    		System.out.println("FAIL [점수 미달] " + "(총점 " + total2 + ")");
     	}*/
     	
     	int a = num4 <=20 && num4 >= 14 ? 1 : 0;
