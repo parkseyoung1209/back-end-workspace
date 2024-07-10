@@ -6,13 +6,13 @@ public class VariablePractice {
 	
 	public static void main(String[] args) {
 		 VariablePractice practice = new VariablePractice();
-		 practice.method1();
+//		 practice.method1();
 		 practice.method2();
-		 practice.method3();
-		 practice.method4();
-		 practice.method5();
-		 practice.method6();
-		 practice.method7();
+//		 practice.method3();
+//		 practice.method4();
+//		 practice.method5();
+//		 practice.method6();
+//		 practice.method7();
 
 	}
 	
@@ -46,15 +46,18 @@ public class VariablePractice {
 		int y = 7;
 		int z = 9;
 		
-		//
-		int tmp = x;
-		x = y;
-		y = z;
-		z = tmp;
+		x= x+y; // 12
+		y= x-y; // y=x(5)
+		x= x-y; // x=y(7);
+		y= z+y; // 14
+		z = y-z; // 14-9 => 5
+		y = y-z;
 		
-		System.out.println("x = " + x);
-		System.out.println("y = " + y);
-		System.out.println("z = " + z);
+		System.out.println("x=" + x);
+		System.out.println("y=" + y);
+		System.out.println("z=" + z);
+		
+		
 	}
 	
 	Scanner sc = new Scanner(System.in);

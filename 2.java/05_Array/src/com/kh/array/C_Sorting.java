@@ -42,6 +42,15 @@ public class C_Sorting {
 		System.out.println(score[score.length-1] +" " + score[0]);
 		
 	}
+	/*
+	 * 선택정렬
+	 */
+	/*
+	 * 삽입정렬
+	 */
+	/*
+	 * 버블정렬
+	 */
 	public static void main(String[] args) {
 		C_Sorting c = new C_Sorting();
 //		c.method1();

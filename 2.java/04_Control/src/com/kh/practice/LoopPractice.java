@@ -1,20 +1,28 @@
 package com.kh.practice;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.Scanner;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.util.StringTokenizer;
+import java.util.NoSuchElementException;
 
 class LoopPractice {
 	Scanner sc = new Scanner(System.in);
+	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		LoopPractice l = new LoopPractice();
 //		l.method1();
 //		l.method2();
 //		l.method3();
 //		l.method4();
 //		l.method5();
-		l.method6();
+//		l.method6();
+		l.method7();
 	}
  
     /*
@@ -224,6 +232,21 @@ class LoopPractice {
 	    }
 		
 		}
-
+    public void method7() {
+    	String str = sc.nextLine();
+    	char ch = ' ';
+    	int check = (int)ch;
+    	int count = 0;
+    	for(int i = 0; i<str.length()-1; i++) {
+    		if((int)str.charAt(i) == check) {
+    			count++;
+    		}
+    	}
+    	System.out.println(count+1);
     }
+  
+           
+}
+ 
+
 
