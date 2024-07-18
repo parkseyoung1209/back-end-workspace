@@ -7,16 +7,25 @@ import com.kh.polymorphism.practice.model.parents.Book;
 public class Member extends Book{
 	private String name;
 	private int coupon;
-	private Book booklist[];
+	private int age;
+	private Book[] booklist = new Book[2];
 	public Member() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Member(String name, int coupon, Book[] booklist) {
+	
+	public Member(String name, int coupon, int age, Book[] booklist) {
 		super();
 		this.name = name;
 		this.coupon = coupon;
+		this.age = age;
 		this.booklist = booklist;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
 	}
 	public String getName() {
 		return name;
@@ -38,7 +47,8 @@ public class Member extends Book{
 	}
 	@Override
 	public String toString() {
-		return "Member [name=" + name + ", coupon=" + coupon + ", booklist=" + Arrays.toString(booklist) + "]";
+		return "Member [name=" + name + ", age=" + age + ", coupon=" + coupon + ", booklist="
+				+ Arrays.toString(booklist) + "]";
 	}
 	
 	
