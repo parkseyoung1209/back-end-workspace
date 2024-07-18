@@ -59,7 +59,7 @@ public class Application {
 		System.out.print("이름 : ");
 		String name = sc.nextLine();
 		member.setName(name);
-		boolean signup = mc.signUp(member.getId(), member.getPassword(), member.getName());
+		boolean signup = mc.signUp(new Member(member.getId(),member.getPassword(),member.getName()));
 		if(signup == true) {
 			System.out.println("성공적으로 회원가입 완료하였습니다");
 		}else {

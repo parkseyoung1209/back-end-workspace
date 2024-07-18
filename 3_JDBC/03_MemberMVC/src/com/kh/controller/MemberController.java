@@ -48,51 +48,52 @@ public class MemberController {
 		rs.close();
 		closeAll(ps,conn);
 	}
-	public boolean signUp(String id, String password, String name) {
-		try {
+	public boolean idCheck(String id) throws SQLException {
+		Connection conn = getConnect();
+		PreparedStatement ps = conn.prepareStatement(p.getProperty("idCheck"));
+		ps.setString(1, id);
+		
+		ResultSet rs = ps.executeQuery();
+		String checkId = null;
+		if(rs.next()) checkId = rs.getString("id");
+		closeAll(rs, ps, conn);
+		if(checkId!=null) return true;
+		return false;
+	}
+	public boolean signUp(Member m) throws SQLException {
+		// 회원가입 기능 구현! 
+		// -> 아이디가 기존에 있는지 체크 여부!
+		// -> member 테이블에 데이터 추가!
+			if(!idCheck(m.getId())) {
 			Connection conn = getConnect();
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO member(id, password, name) VALUES(?,?,?)");
-			ps.setString(1, id);
-			ps.setString(2, password);
-			ps.setString(3, name);
+			PreparedStatement ps = conn.prepareStatement(p.getProperty("signUp"));
+			ps.setString(1, m.getId());
+			ps.setString(2, m.getPassword());
+			ps.setString(3, m.getName());
 			ps.executeUpdate();
 			closeAll(ps, conn);
 			return true;
-		} catch (SQLException e) {
+			}
 			return false;
-		}
-		
-		// 회원가입 기능 구현! 
-		// -> 아이디가 기존에 있는지 체크 여부!
-		// -> member 테이블에 데이터 추가! 
-		
-
 	}
 	
-	public String login(String id, String password) {
-		try {
+	public String login(String id, String password) throws SQLException {
+		// 로그인 기능 구현! 
+				// -> member 테이블에서 id와 password로 멤버 정보 하나 가져오기!
 			Connection conn = getConnect();
-			PreparedStatement ps = conn.prepareStatement("SELECT * FROM member WHERE id = ? AND password = ?");
+			PreparedStatement ps = conn.prepareStatement(p.getProperty("login"));
 			ps.setString(1, id);
 			ps.setString(2, password);
 			ResultSet rs = ps.executeQuery();
-			
-			if(rs.next()) {
-				return rs.getString("name");
-			}
+			if(rs.next()) return rs.getString("name");
 			closeAll(rs, ps, conn);
-		} catch (SQLException e) {
-		}
-		// 로그인 기능 구현! 
-		// -> member 테이블에서 id와 password로 멤버 정보 하나 가져오기!
-		return null;
-		
+			return null;
 	}
 	
 	public boolean changePassword(String id, String password, String newPassword) {
 		try {
 			Connection conn = getConnect();
-			PreparedStatement ps = conn.prepareStatement("UPDATE member SET password = ? WHERE id = ?");
+			PreparedStatement ps = conn.prepareStatement(p.getProperty("changePassword"));
 			if(password.equals(newPassword)) {
 				return false;
 			}else {
@@ -109,12 +110,10 @@ public class MemberController {
 		// -> login 메서드 활용 후 사용자 이름이 null이 아니면 member 테이블에서 id로 새로운 패스워드로 변경
 
 	}
-	
 	public void changeName(String name, String id) {
-		
 		try {
 			Connection conn = getConnect();
-			PreparedStatement ps = conn.prepareStatement("UPDATE member SET name = ? WHERE id = ?");
+			PreparedStatement ps = conn.prepareStatement(p.getProperty("changeName"));
 			ps.setString(1, name);
 			ps.setString(2, id);
 			ps.executeUpdate();
