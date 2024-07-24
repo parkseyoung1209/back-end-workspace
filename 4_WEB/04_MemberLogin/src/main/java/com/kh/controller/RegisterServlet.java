@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,38 +20,27 @@ public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// index.jsp에서 /register로 요청하여
-		// 요청 받은 아이디(id), 비밀번호(pwd), 이름을 받는다(name).
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html;charset=utf-8");
-		String id = request.getParameter("id");
-		member.setId(id);
-		String pwd = request.getParameter("pwd");
-		member.setPassword(pwd);
-		String name = request.getParameter("name");
-		member.setName(name);
+		HttpSession session = request.getSession();
 		
-			String check = "";
+		String id = request.getParameter("id");
+		
+		String pwd = request.getParameter("pwd");
+	
+		String name = request.getParameter("name");
+		
+		
 			try {
-				boolean logic = mDao.resisterMember(new Member(member.getId(),member.getPassword(),member.getName()));
-				check = logic == true ? "true" : "false";
-				request.setAttribute("check", check);
-				request.setAttribute("name", name);
+				boolean logic = mDao.resisterMember(new Member(id,pwd,name));
+				session.setAttribute("resister", logic);
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-		request.getRequestDispatcher("index.jsp").forward(request, response);
+		
+		response.sendRedirect("../index.jsp");
 	}
 }
-//			if(check) {
-//				request.setAttribute("name", name);
-//				request.getRequestDispatcher("result.jsp").forward(request, response);
-//			}else {
-//				request.getRequestDispatcher("failedResult.jsp").forward(request, response);
-//			}
-//		} catch (ClassNotFoundException | SQLException e) {
-//			e.printStackTrace();
-//		}
 		
 		//바인딩 : 결과 페이지에 서버에서 받은 값 보냄
 		
