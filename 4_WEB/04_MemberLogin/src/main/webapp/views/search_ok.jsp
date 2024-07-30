@@ -14,5 +14,6 @@
 		<p>비밀번호: <%=member.getPassword() %></p>
 		<p>이름: <%=member.getName() %></p>
 		<% }%>
+		<a href="/">메인 페이지로 돌아가기</a>
 </body>
 </html>

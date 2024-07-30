@@ -9,11 +9,21 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%ArrayList<Member>list = (ArrayList<Member>) request.getAttribute("allList");
-	 if(list!=null) {%>
+	<%ArrayList<Member>list = (ArrayList<Member>) request.getAttribute("allList");%>
+	<table border="1">
+	<tr>
+		<th>아이디</th>
+		<th>비밀번호</th>
+		<th>이름</th>
+	</tr>
 	<%for(Member m : list) {%>
-		<p><%=m %></p>
+	<tr>
+		<td><%=m.getId() %></td>
+		<td><%=m.getPassword() %></td>
+		<td><%=m.getName() %></td>
 	<% }%>
-	<% }%>
+	</tr>
+	</table>
+	<a href="/">돌아가기</a>
 </body>
 </html>
