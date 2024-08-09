@@ -1,9 +1,11 @@
 package mapper;
+
 import org.apache.ibatis.annotations.Mapper;
 
-import com.semi.youtube.model.vo.Member;
+import com.kh.ajax.model.vo.Member;
 
 @Mapper
 public interface MemberMapper {
-	Member check(String id);
+	Member checkId(String id);
+	void register(Member member);
 }
