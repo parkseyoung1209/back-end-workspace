@@ -13,20 +13,36 @@
 <body>
 <div class="container">
   	<h1>로그인</h1>
-  	<form action="login" method="post" onsubmit="return validate()">
+  	<form id="frm">
   <div class="mb-3">
     <label for="id" class="form-label">아이디</label>
-    <input type="text" class="form-control" id="id">
+    <input type="text" class="form-control" id="id" name="id">
     <div id="idCheck" class="form-text"></div>
   </div>
   <div class="mb-3">
     <label for="password" class="form-label">비밀번호</label>
-    <input type="password" class="form-control" id="password">
+    <input type="password" class="form-control" id="password" name="password">
     <div id="pwdCheck" class="form-text"></div>
   </div>
-  <button type="submit" class="btn btn-dark">로그인</button>
+  <button type="submit" class="btn btn-dark" id="login">로그인</button>
 </form>
+<a href="/signUp">아직 회원이 아니신가요?</a>
+<script>
+$("#login").click((e) => {
+	e.preventDefault(); // 기존 이벤트 제거
+	$.ajax({
+		url: "/login",
+		type: "post",
+		data: $("#frm").serialize(),
+		success: function(data) {
+			console.log(data); // 토큰 값 확인!
+			// 토큰 값 -> localStorage에 저장
+			localStorage.setItem("token", data);
+			location.href = "/";
+		}
+	});
+});
+</script>
 </div>
-<script src="${pageContext.request.contextPath}/js/login.js"></script>
 </body>
 </html>

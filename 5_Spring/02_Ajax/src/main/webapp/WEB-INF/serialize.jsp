@@ -11,7 +11,7 @@
 	<form id="frm">
 	Id : <input type="text" id="id" name="id"><br>
 	pwd : <input type="text" id="password" name="password"><br>
-	name : <input type="text" id="name" name="name"><br>
+	<!-- name : <input type="text" id="name" name="name"><br> -->
 	
 	<input type="button" value="가입" id="btn">
 	</form>
@@ -20,10 +20,6 @@
 	
 	<script>
 		$("#btn").click(() => {
-			const id = $("#id").val();
-			const password = $("#password").val();
-			const name = $("#name").val();
-			const user = {id, password, name};
 			$.ajax({
 				type : "post",
 				url : "/serial",

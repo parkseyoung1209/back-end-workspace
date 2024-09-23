@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.BoardMapper">
+	<insert id="addBoard" parameterType="Board">
+	INSERT INTO board(title, content, url) VALUES(#{title},#{content}, #{url})
+	</insert>
+	
+	<select id="readBoard" resultType="Board" parameterType="Paging">
+	SELECT * FROM board
+	LIMIT #{offset}, #{limit}
+	</select>
+	<select id="readChooseBoard" resultType="Board" parameterType="int">
+	SELECT * FROM board
+	WHERE no=#{no}
+	</select>
+</mapper>

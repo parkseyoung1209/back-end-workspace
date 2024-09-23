@@ -8,6 +8,6 @@
 	</select>
 	
 	<insert id="register" parameterType="Member">
-		INSERT INTO member VALUES(#{id}, #{password}, #{name})
+		INSERT INTO member(id,password) VALUES(#{id}, #{password})
 	</insert>
 </mapper>
