@@ -2,23 +2,21 @@ package com.kh.upload.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.PublicKey;
-import java.text.Format;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Formatter;
+
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,19 +41,35 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/api/*") // api/v1 v2 v3.. <-단순 버전 의미
 // 실제 주소가 http://localhost:8080/api
 public class BoardController {
+	
+	private String path = "\\\\192.168.10.51\\upload\\";
 	@Autowired
 	private BoardService service;
 	
+	public void fileUpload(MultipartFile file) throws IllegalStateException, IOException {
+		// 중복 방지를 위한 UUID 적용
+		UUID uuid = UUID.randomUUID();
+		String fileName = uuid.toString() + "_" + file.getOriginalFilename();
+				
+		File copyFile = new File("D:\\upload\\" + fileName);
+		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
+	}
+	
 	// Read - Get : 전체 목록 보기
 	@GetMapping("/board")
-	public ResponseEntity  list(Paging paging) {
+	public ResponseEntity list(Paging paging) {
 		List<Board> list = service.readBoard(paging);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(list);
 	}
-	@GetMapping("/write")
-	public String write() {
-		return "write";
+	
+	// read 1개만
+	@GetMapping("/board/{no}")
+	public ResponseEntity view(@PathVariable int no) {
+		Board board = service.readChooseBoard(no);
+		if(board!=null) {
+		return ResponseEntity.status(HttpStatus.OK).body(board);
+		} else return null;
 	}
 	
 	// CRUD : Create - Post, Read - Get, Update - Put, Delete - Delete
@@ -74,20 +88,11 @@ public class BoardController {
 		board.setDate(LocalDateTime.now());
 		board.setFile(file);
 		service.addBoard(board);
-//		File copyFile = new File("D:\\back-end-workspace\\5_Spring\\05_FileUpload\\src\\main\\resources\\static\\upload\\" + fileName);
-//		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
+		File copyFile = new File("D:\\back-end-workspace\\5_Spring\\05_FileUpload\\src\\main\\resources\\static\\upload\\" + fileName);
+		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	public void fileUpload(MultipartFile file) throws IllegalStateException, IOException {
-		// 중복 방지를 위한 UUID 적용
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-				
-		File copyFile = new File("D:\\upload\\" + fileName);
-		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
-	}
-	
 	
 	@PostMapping("/multiUpload")
 	public String multiUpload(List<MultipartFile> files) throws IllegalStateException, IOException {
@@ -108,5 +113,33 @@ public class BoardController {
 		session.setAttribute("content", board);
 	}
 	
+	@PostMapping("/update")
+	public String update(Board vo) throws IllegalStateException, IOException {
+		System.out.println(vo);
+		System.out.println(vo.getFile().isEmpty());
+		if(vo.getFile().isEmpty()) {
+			// 파일이 비어있다면 기존 이미지 url 그대로 DB에 저장\
+		} else {
+			// 파일이 비어있지 않다면 기존 이미지 삭제, 새 이미지 등록
+			File file = new File(path + vo.getUrl());
+		}
+		// title, content, url, no
+		
+		return "redirect:/list";
+	}
+	
+	@GetMapping("/delete")
+	public String delete(int no) {
+		
+		// 업로드한 파일 삭제 (필요한 건 URL)
+		Board board = service.readChooseBoard(no);
+			if(board.getUrl()!=null) { // 기존 이미지가 null이 아닌 경우
+				File file = new File(path + board.getUrl());
+				file.delete();
+			}
+		
+		service.delete(no);
+		return "redirect:/list";
+	}
 	
 }
