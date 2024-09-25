@@ -11,16 +11,18 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.upload.model.dto.BoardDTO;
 import com.kh.upload.model.vo.Board;
 import com.kh.upload.model.vo.Paging;
 import com.kh.upload.service.BoardService;
@@ -54,30 +56,18 @@ public class BoardController {
 		File copyFile = new File("D:\\upload\\" + fileName);
 		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
 	}
-	
-	// Read - Get : 전체 목록 보기
-	@GetMapping("/board")
-	public ResponseEntity list(Paging paging) {
-		List<Board> list = service.readBoard(paging);
+	@PostMapping("/multiUpload")
+	public String multiUpload(List<MultipartFile> files) throws IllegalStateException, IOException {
 		
-		return ResponseEntity.status(HttpStatus.OK).body(list);
+		for(MultipartFile file : files) {
+			fileUpload(file);
+		}
+		return "redirect:/";
 	}
 	
-	// read 1개만
-	@GetMapping("/board/{no}")
-	public ResponseEntity view(@PathVariable int no) {
-		Board board = service.readChooseBoard(no);
-		if(board!=null) {
-		return ResponseEntity.status(HttpStatus.OK).body(board);
-		} else return null;
-	}
 	
 	// CRUD : Create - Post, Read - Get, Update - Put, Delete - Delete
 	
-	@GetMapping("/contentInfo")
-	public String contentInfo() {
-		return "contentInfo";
-	}
 	
 	// Create - Post
 	@PostMapping("/board")
@@ -88,33 +78,32 @@ public class BoardController {
 		board.setDate(LocalDateTime.now());
 		board.setFile(file);
 		service.addBoard(board);
-		File copyFile = new File("D:\\back-end-workspace\\5_Spring\\05_FileUpload\\src\\main\\resources\\static\\upload\\" + fileName);
+		File copyFile = new File(path + fileName);
 		file.transferTo(copyFile); // 업로드한 파일이 path 위치로 저장
 		
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
-	@PostMapping("/multiUpload")
-	public String multiUpload(List<MultipartFile> files) throws IllegalStateException, IOException {
-		
-		for(MultipartFile file : files) {
-			fileUpload(file);
+	// Read - Get : 전체 목록 보기
+		@GetMapping("/board")
+		public ResponseEntity list(Paging paging) {
+			List<Board> list = service.readBoard(paging);
+			
+			return ResponseEntity.status(HttpStatus.OK).body(new BoardDTO(list, paging));
 		}
-		return "redirect:/";
-	}
+		
+		// read 1개만
+		@GetMapping("/board/{no}")
+		public ResponseEntity view(@PathVariable int no) {
+			Board board = service.readChooseBoard(no);
+			if(board!=null) {
+			return ResponseEntity.status(HttpStatus.OK).body(board);
+			} else return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}
 	
-	@ResponseBody
-	@PostMapping("/contentInfo")
-	public void contentInfo(String number, HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		int num = Integer.parseInt(number);
-		Board board = service.readChooseBoard(num);
-		System.out.println(board);
-		session.setAttribute("content", board);
-	}
-	
-	@PostMapping("/update")
-	public String update(Board vo) throws IllegalStateException, IOException {
+	// update - Put
+	@PutMapping("/board")
+	public ResponseEntity update(Board vo) throws IllegalStateException, IOException {
 		System.out.println(vo);
 		System.out.println(vo.getFile().isEmpty());
 		if(vo.getFile().isEmpty()) {
@@ -123,13 +112,14 @@ public class BoardController {
 			// 파일이 비어있지 않다면 기존 이미지 삭제, 새 이미지 등록
 			File file = new File(path + vo.getUrl());
 		}
+		service.update(vo);
 		// title, content, url, no
 		
-		return "redirect:/list";
+		return ResponseEntity.status(HttpStatus.OK).build();
 	}
-	
-	@GetMapping("/delete")
-	public String delete(int no) {
+	//delete - delete
+	@DeleteMapping("/board/{no}")
+	public ResponseEntity delete(@PathVariable int no) {
 		
 		// 업로드한 파일 삭제 (필요한 건 URL)
 		Board board = service.readChooseBoard(no);
@@ -139,7 +129,18 @@ public class BoardController {
 			}
 		
 		service.delete(no);
-		return "redirect:/list";
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
+	
+	@ResponseBody
+	@PostMapping("/contentInfo")
+	public void contentInfo(String number, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		int num = Integer.parseInt(number);
+		Board board = service.readChooseBoard(num);
+		System.out.println(board);
+		session.setAttribute("content", board);
 	}
 	
 }
